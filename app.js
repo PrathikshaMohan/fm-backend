@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: [
     'http://localhost:5173', // Vite dev
-    'https://f-market.netlify.app' // Replace with your actual Netlify domain
+    'https://f-market.netlify.app' 
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true // only needed if using cookies or auth headers
