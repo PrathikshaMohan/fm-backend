@@ -2,31 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db'); // or your db connection file
 
-// 🔔 Route 1: GET notifications for a specific farmer
-router.get('/:farmerId', (req, res) => {
-  const farmerId = req.params.farmerId;
-
-  const sql = `
-    SELECT n.*, 
-           u.full_name, 
-           u.phone_number
-    FROM notifications n
-    JOIN users u ON n.buyer_id = u.id
-    WHERE n.farmer_id = ?
-    ORDER BY n.created_at DESC
-  `;
-
-  db.query(sql, [farmerId], (err, results) => {
-    if (err) {
-      console.error('Error fetching notifications:', err);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-
-    res.json(results);
-  });
-});
-
-// 📦 Route 2: GET farmer orders with buyer & product info
+// 📦 Route 1: GET farmer orders with buyer & product info
 router.get('/orders/:farmerId', (req, res) => {
   const farmerId = req.params.farmerId;
 
@@ -94,6 +70,31 @@ orders[row.order_id].total += row.quantity * row.price;
     res.json(Object.values(orders));
   });
 });
+
+// 🔔 Route 2: GET notifications for a specific farmer
+router.get('/:farmerId', (req, res) => {
+  const farmerId = req.params.farmerId;
+
+  const sql = `
+    SELECT n.*, 
+           u.full_name, 
+           u.phone_number
+    FROM notifications n
+    JOIN users u ON n.buyer_id = u.id
+    WHERE n.farmer_id = ?
+    ORDER BY n.created_at DESC
+  `;
+
+  db.query(sql, [farmerId], (err, results) => {
+    if (err) {
+      console.error('Error fetching notifications:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    res.json(results);
+  });
+});
+
 
 // PUT route to update order status and optionally pickup location/time slot
 router.put('/orders/:orderId/status', (req, res) => {
