@@ -27,7 +27,7 @@ app.use(cors({
     'https://f-market.netlify.app' 
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true // only needed if using cookies or auth headers
+  
 }));
 app.use(express.json());
 
